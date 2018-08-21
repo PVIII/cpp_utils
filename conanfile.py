@@ -3,8 +3,11 @@ from conans import ConanFile, CMake
 class CppUtils(ConanFile):
     name = "CppUtils"
     version = "0.1"
+    url = "https://github.com/PVIII/cpp_utils.git"
+    license = "MIT"
+    description = "Just some utilities to make C++ more elegant."
     settings = "os", "compiler", "arch", "build_type"
-    exports_sources = "include/*", "CMakeLists.txt", "test/ios_test.cpp"
+    exports_sources = "include/**", "CMakeLists.txt", "test/CMakeLists.txt", "test/*.cpp"
     no_copy_source = True
 
     def build(self):
@@ -14,7 +17,8 @@ class CppUtils(ConanFile):
         cmake.test()
 
     def package(self):
-        self.copy("*.h")
+        self.copy("*.hpp")
+        self.copy("CMakeLists.txt")
 
     def package_id(self):
         self.info.header_only()
