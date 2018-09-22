@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.8)
 
-add_executable(cpp_utils_test ios_test.cpp)
+add_executable(cpp_utils_test ios_test.cpp scope_guard_test.cpp)
 target_link_libraries(cpp_utils_test PUBLIC cpp_utils)
 target_include_directories(cpp_utils_test PUBLIC
                            ${CMAKE_CURRENT_BINARY_DIR}

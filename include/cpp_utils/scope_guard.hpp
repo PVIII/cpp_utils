@@ -6,14 +6,21 @@
 
 #include <exception>
 
-template<class Func> class on_exit_guard
+template<class Func> class exit_guard
 {
     Func f_;
 
   public:
-    constexpr on_exit_guard(Func&& f) : f_(f) {}
-    ~on_exit_guard() noexcept(noexcept(f_())) { f_(); }
+    explicit exit_guard(Func&& f) : f_(std::forward<Func>(f)) {}
+    exit_guard(const exit_guard&) = delete;
+    ~exit_guard() noexcept(noexcept(f_())) { f_(); }
+    exit_guard<Func>& operator=(const exit_guard&) = delete;
 };
+
+template<class Func> exit_guard<Func> make_exit_guard(Func&& f)
+{
+    return exit_guard<Func>(std::forward<Func>(f));
+}
 
 template<class Func> struct if_not_unwinding_wrapper
 {
@@ -21,7 +28,7 @@ template<class Func> struct if_not_unwinding_wrapper
     Func f_;
 
   public:
-    constexpr if_not_unwinding_wrapper(Func&& f) : f_(f) {}
+    constexpr explicit if_not_unwinding_wrapper(Func&& f) : f_(f) {}
     constexpr void operator()()
     {
         if(exception_count_ == std::uncaught_exceptions()) { f_(); }
@@ -29,11 +36,11 @@ template<class Func> struct if_not_unwinding_wrapper
 };
 
 template<class Func>
-struct on_normal_exit_guard : on_exit_guard<if_not_unwinding_wrapper<Func>>
+struct on_return_guard : exit_guard<if_not_unwinding_wrapper<Func>>
 {
-    constexpr on_normal_exit_guard(Func&& f)
-        : on_exit_guard<if_not_unwinding_wrapper<Func>>(
-              if_not_unwinding_wrapper(std::forward<Func>(f)))
+    explicit on_return_guard(Func&& f)
+        : exit_guard<if_not_unwinding_wrapper<Func>>(
+              if_not_unwinding_wrapper<Func>(std::forward<Func>(f)))
     {
     }
 };
