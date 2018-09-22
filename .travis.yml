@@ -10,14 +10,14 @@ addons:
     packages:
       - gcc-8
       - g++-8
-      - catch
+
+install:
+  - pip install conan_package_tools
+  - conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
 
 before_script:
   - export CC=gcc-8
   - export CXX=g++-8
 
 script:
-  - mkdir -p build && cd build
-  - cmake ..
-  - make
-  - ctest
+  - conan create . pviii/stable
