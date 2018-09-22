@@ -10,7 +10,7 @@ SCENARIO("Exit Guard")
         {
             bool executed = false;
             {
-                auto& g = make_exit_guard([&]() { executed = true; });
+                auto g = exit_guard([&]() { executed = true; });
             }
             REQUIRE(executed);
         }
