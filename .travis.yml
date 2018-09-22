@@ -12,7 +12,7 @@ addons:
       - g++-8
 
 install:
-  - pip install conan_package_tools
+  - pip install --user conan
   - conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
 
 before_script:
