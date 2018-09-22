@@ -9,12 +9,23 @@
 template<class Func> class exit_guard
 {
     Func f_;
+    bool active_ = true;
 
   public:
     explicit exit_guard(Func&& f) : f_(std::forward<Func>(f)) {}
     exit_guard(const exit_guard&) = delete;
-    ~exit_guard() noexcept(noexcept(f_())) { f_(); }
+    exit_guard(exit_guard&& other) : f_(other.f_) { other.active_ = false; }
+    ~exit_guard() noexcept(noexcept(f_()))
+    {
+        if(active_) { f_(); }
+    }
     exit_guard<Func>& operator=(const exit_guard&) = delete;
+    exit_guard<Func>& operator                     =(exit_guard&& other)
+    {
+        f_            = other.f_;
+        active_       = other.active_;
+        other.active_ = false;
+    }
 };
 
 template<class Func> exit_guard<Func> make_exit_guard(Func&& f)
