@@ -2,6 +2,7 @@ dist: trusty
 sudo: false
 language: cpp
 compiler: gcc
+cache: ccache
 
 matrix:
   fast_finish: true
