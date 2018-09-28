@@ -47,6 +47,7 @@ matrix:
             - clang-6.0
       env:
         - MATRIX_EVAL="CC=clang-6.0 && CXX=clang++-6.0"
+        - CXX_FLAGS="-stdlib=libc++"
     - os: linux
       addons:
         apt:
@@ -57,6 +58,7 @@ matrix:
             - clang-5.0
       env:
         - MATRIX_EVAL="CC=clang-5.0 && CXX=clang++-5.0"
+        - CXX_FLAGS="-stdlib=libc++"
 
 before_install:
   - eval "${MATRIX_EVAL}"
