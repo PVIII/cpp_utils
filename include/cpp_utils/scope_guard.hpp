@@ -34,6 +34,8 @@ template<class Func> exit_guard<Func> make_exit_guard(Func&& f)
     return exit_guard<Func>(std::forward<Func>(f));
 }
 
+namespace detail
+{
 template<class Func> struct if_not_unwinding_wrapper
 {
     int  exception_count_ = std::uncaught_exceptions();
@@ -46,13 +48,14 @@ template<class Func> struct if_not_unwinding_wrapper
         if(exception_count_ == std::uncaught_exceptions()) { f_(); }
     }
 };
+} // namespace detail
 
 template<class Func>
-struct on_return_guard : exit_guard<if_not_unwinding_wrapper<Func>>
+struct on_return_guard : exit_guard<detail::if_not_unwinding_wrapper<Func>>
 {
     explicit on_return_guard(Func&& f)
-        : exit_guard<if_not_unwinding_wrapper<Func>>(
-              if_not_unwinding_wrapper<Func>(std::forward<Func>(f)))
+        : exit_guard<detail::if_not_unwinding_wrapper<Func>>(
+              detail::if_not_unwinding_wrapper<Func>(std::forward<Func>(f)))
     {
     }
 };
