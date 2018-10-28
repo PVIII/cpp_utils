@@ -6,5 +6,5 @@
 #include <iostream>
 
 #ifdef __cpp_deduction_guides
-SCENARIO("class template deduction") { ostream_capture c(std::cout); }
+SCENARIO("ios types") { ostream_capture c(std::cout); }
 #endif
