@@ -36,7 +36,8 @@ SCENARIO("Exit Guard")
         WHEN("The guard is moved from.")
         {
             unsigned executions = 0;
-            THEN("The action must not be executed while still in the scope.")
+            THEN("The action must be executed exactly once after leaving the "
+                 "scope.")
             {
                 auto g1 = make_exit_guard([&]() { ++executions; });
                 auto g2 = std::move(g1);
