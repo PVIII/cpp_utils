@@ -48,3 +48,47 @@ SCENARIO("Exit Guard")
         }
     }
 }
+
+SCENARIO("return_guard")
+{
+    GIVEN("A guard that executes on non-exception exits.")
+    {
+        WHEN("The scope is left normally.")
+        {
+            THEN("The action must not be executed while still in the scope.")
+            {
+                bool executed = false;
+                {
+                    auto g = make_return_guard([&]() { executed = true; });
+                    REQUIRE(not executed);
+                }
+                REQUIRE(executed);
+            }
+
+            THEN("The action is executed exactly once.")
+            {
+                unsigned n = 0;
+                {
+                    auto g = make_return_guard([&]() { ++n; });
+                }
+                REQUIRE(n == 1);
+            }
+        }
+        WHEN("The scope is left via exception.")
+        {
+            THEN("The action is not executed.")
+            {
+                bool executed = false;
+                try
+                {
+                    auto g = make_return_guard([&]() { executed = true; });
+                    throw 0;
+                }
+                catch(...)
+                {
+                    REQUIRE(not executed);
+                }
+            }
+        }
+    }
+}

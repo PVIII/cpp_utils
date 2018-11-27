@@ -5,7 +5,7 @@
 #ifdef __cpp_deduction_guides
 SCENARIO("scope_guard types.")
 {
-    exit_guard      g1([] {});
-    on_return_guard g2([] {});
+    exit_guard   g1([] {});
+    return_guard g2([] {});
 }
 #endif

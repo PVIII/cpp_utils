@@ -59,13 +59,18 @@ template<class Func> struct if_not_unwinding_wrapper
  * is not caused by an exception.
  */
 template<class Func>
-struct on_return_guard : exit_guard<detail::if_not_unwinding_wrapper<Func>>
+struct return_guard : exit_guard<detail::if_not_unwinding_wrapper<Func>>
 {
-    explicit on_return_guard(Func&& f)
+    explicit return_guard(Func&& f)
         : exit_guard<detail::if_not_unwinding_wrapper<Func>>(
               detail::if_not_unwinding_wrapper<Func>(std::forward<Func>(f)))
     {
     }
 };
+
+template<class Func> return_guard<Func> make_return_guard(Func&& f)
+{
+    return return_guard<Func>(std::forward<Func>(f));
+}
 
 #endif /* SCOPE_GUARD_H */
