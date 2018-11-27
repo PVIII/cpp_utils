@@ -10,65 +10,40 @@ SCENARIO("Exit Guard")
     {
         WHEN("The scope is left normally.")
         {
-            bool executed = false;
             THEN("The action must not be executed while still in the scope.")
             {
+                bool executed = false;
                 {
                     auto g = make_exit_guard([&]() { executed = true; });
                     REQUIRE(not executed);
                 }
                 REQUIRE(executed);
             }
+
+            THEN("The action is executed exactly once.")
+            {
+                unsigned n = 0;
+                {
+                    auto g = make_exit_guard([&]() { ++n; });
+                }
+                REQUIRE(n == 1);
+            }
         }
         WHEN("The scope is left via exception.")
         {
-            bool executed = false;
-            try
+            THEN("The action is executed exactly once when the scope has been "
+                 "left.")
             {
-                auto g = make_exit_guard([&]() { executed = true; });
-                throw 0;
-            }
-            catch(...)
-            {
-                THEN(
-                    "The action must be executed when the scope has been left.")
+                unsigned n = 0;
+                try
                 {
-                    REQUIRE(executed);
+                    auto g = make_exit_guard([&]() { ++n; });
+                    throw 0;
                 }
-            }
-        }
-        WHEN("The guard is moved from.")
-        {
-            unsigned executions = 0;
-            THEN("The action must be executed exactly once after leaving the "
-                 "scope.")
-            {
+                catch(...)
                 {
-                    auto g1 = make_exit_guard([&]() { ++executions; });
-                    auto g2 = std::move(g1);
-                    REQUIRE(executions == 0);
+                    REQUIRE(n == 1);
                 }
-                REQUIRE(executions == 1);
-            }
-        }
-        WHEN("The guard is put into a container.")
-        {
-            struct F
-            {
-                unsigned* e;
-                void      operator()() { ++(*e); }
-            };
-
-            unsigned executions = 0;
-            THEN("The action must be executed exactly once after leaving the "
-                 "scope.")
-            {
-                {
-                    std::vector<exit_guard<F>> v;
-                    v.push_back(make_exit_guard(F{&executions}));
-                    REQUIRE(executions == 0);
-                }
-                REQUIRE(executions == 1);
             }
         }
     }
