@@ -16,7 +16,8 @@ class CppUtils(ConanFile):
         cmake = CMake(self)
         cmake.configure()
         cmake.build()
-        cmake.test()
+        if tools.get_env("CONAN_RUN_TESTS", True):
+            cmake.test()
 
     def package(self):
         self.copy("*.hpp")
