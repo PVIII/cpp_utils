@@ -13,10 +13,12 @@ SCENARIO("Exit Guard")
             bool executed = false;
             THEN("The action must not be executed while still in the scope.")
             {
-                auto g = make_exit_guard([&]() { executed = true; });
-                REQUIRE(not executed);
+                {
+                    auto g = make_exit_guard([&]() { executed = true; });
+                    REQUIRE(not executed);
+                }
+                REQUIRE(executed);
             }
-            REQUIRE(executed);
         }
         WHEN("The scope is left via exception.")
         {
@@ -41,11 +43,13 @@ SCENARIO("Exit Guard")
             THEN("The action must be executed exactly once after leaving the "
                  "scope.")
             {
-                auto g1 = make_exit_guard([&]() { ++executions; });
-                auto g2 = std::move(g1);
-                REQUIRE(executions == 0);
+                {
+                    auto g1 = make_exit_guard([&]() { ++executions; });
+                    auto g2 = std::move(g1);
+                    REQUIRE(executions == 0);
+                }
+                REQUIRE(executions == 1);
             }
-            REQUIRE(executions == 1);
         }
         WHEN("The guard is put into a container.")
         {
