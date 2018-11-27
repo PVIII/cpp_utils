@@ -6,14 +6,23 @@
 
 #include <exception>
 
+/**
+ * Calls the given functor exactly once on any exit from the current scope,
+ * including exceptions.
+ */
 template<class Func> class exit_guard
 {
     Func f_;
+    // This variable is only necessary because there is a move constructor.
     bool active_ = true;
 
   public:
     explicit exit_guard(Func f) : f_(f) {}
     exit_guard(const exit_guard&) = delete;
+    /**
+     * Deactivates the moved from guard. This constructor is necessary for the
+     * make_exit_guard function. This can be removed in C++17.
+     */
     exit_guard(exit_guard&& other) : f_(other.f_) { other.active_ = false; }
     ~exit_guard()
     {
@@ -45,6 +54,10 @@ template<class Func> struct if_not_unwinding_wrapper
 };
 } // namespace detail
 
+/**
+ * Calls the given functor exactly once on any exit from the current scope, that
+ * is not caused by an exception.
+ */
 template<class Func>
 struct on_return_guard : exit_guard<detail::if_not_unwinding_wrapper<Func>>
 {
