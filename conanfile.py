@@ -1,4 +1,4 @@
-from conans import ConanFile, CMake
+from conans import ConanFile, CMake, tools
 
 class CppUtils(ConanFile):
     name = "CppUtils"
