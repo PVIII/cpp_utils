@@ -1,5 +1,7 @@
 #include "cpp_utils/scope_guard.hpp"
 
+#include <vector>
+
 #include "catch.hpp"
 
 SCENARIO("Exit Guard")
@@ -44,6 +46,26 @@ SCENARIO("Exit Guard")
                 REQUIRE(executions == 0);
             }
             REQUIRE(executions == 1);
+        }
+        WHEN("The guard is put into a container.")
+        {
+            struct F
+            {
+                unsigned* e;
+                void      operator()() { ++(*e); }
+            };
+
+            unsigned executions = 0;
+            THEN("The action must be executed exactly once after leaving the "
+                 "scope.")
+            {
+                {
+                    std::vector<exit_guard<F>> v;
+                    v.push_back(make_exit_guard(F{&executions}));
+                    REQUIRE(executions == 0);
+                }
+                REQUIRE(executions == 1);
+            }
         }
     }
 }
