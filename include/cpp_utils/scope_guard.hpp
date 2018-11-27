@@ -20,12 +20,7 @@ template<class Func> class exit_guard
         if(active_) { f_(); }
     }
 
-    exit_guard<Func>& operator=(exit_guard&& other)
-    {
-        f_            = other.f_;
-        active_       = other.active_;
-        other.active_ = false;
-    }
+    exit_guard<Func>& operator=(exit_guard&& other) = delete;
     exit_guard<Func>& operator=(const exit_guard&) = delete;
 };
 
