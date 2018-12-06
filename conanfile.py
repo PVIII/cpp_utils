@@ -2,9 +2,10 @@ from conans import ConanFile, CMake, tools
 
 class CppUtils(ConanFile):
     name = "CppUtils"
-    version = "0.1"
+    version = "1.0"
     url = "https://github.com/PVIII/cpp_utils.git"
     license = "MIT"
+    author = "Patrick WANG-FRENINGER <github@freninger.at>"
     description = "Just some utilities to make C++ more elegant."
     settings = "os", "compiler", "arch", "build_type"
     generators = "cmake"
