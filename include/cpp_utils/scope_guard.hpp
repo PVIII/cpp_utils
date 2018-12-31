@@ -24,7 +24,7 @@ template<class Func> class exit_guard
      * make_exit_guard function. This can be removed in C++17.
      */
     exit_guard(exit_guard&& other) : f_(other.f_) { other.active_ = false; }
-    ~exit_guard()
+    ~exit_guard() noexcept(noexcept(f_()))
     {
         if(active_) { f_(); }
     }
