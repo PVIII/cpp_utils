@@ -4,7 +4,7 @@
 
 #include "catch.hpp"
 
-SCENARIO("Exit Guard")
+SCENARIO("Exit guard")
 {
     GIVEN("A guard that executes on every exit.")
     {
@@ -28,6 +28,18 @@ SCENARIO("Exit Guard")
                 }
                 REQUIRE(n == 1);
             }
+
+            AND_WHEN("The action throws an exception.")
+            {
+                auto f = []() {
+                    auto g = make_exit_guard([]() { throw "exception"; });
+                };
+                THEN("The exception can be caught.")
+                {
+                    using Catch::Matchers::Equals;
+                    REQUIRE_THROWS_WITH(f(), Equals("exception"));
+                }
+            }
         }
         WHEN("The scope is left via exception.")
         {
@@ -49,7 +61,7 @@ SCENARIO("Exit Guard")
     }
 }
 
-SCENARIO("return_guard")
+SCENARIO("Return guard")
 {
     GIVEN("A guard that executes on non-exception exits.")
     {
@@ -72,6 +84,18 @@ SCENARIO("return_guard")
                     auto g = make_return_guard([&]() { ++n; });
                 }
                 REQUIRE(n == 1);
+            }
+
+            AND_WHEN("The action throws an exception.")
+            {
+                auto f = []() {
+                    auto g = make_return_guard([]() { throw "exception"; });
+                };
+                THEN("The exception can be caught.")
+                {
+                    using Catch::Matchers::Equals;
+                    REQUIRE_THROWS_WITH(f(), Equals("exception"));
+                }
             }
         }
         WHEN("The scope is left via exception.")
