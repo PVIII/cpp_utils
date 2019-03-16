@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "catch.hpp"
+#include "catch2/catch.hpp"
 
 SCENARIO("Exit guard")
 {

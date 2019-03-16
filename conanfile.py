@@ -9,7 +9,7 @@ class CppUtils(ConanFile):
     description = "Just some utilities to make C++ more elegant."
     settings = "os", "compiler", "arch", "build_type"
     generators = "cmake"
-    build_requires = "catch2/2.1.0@bincrafters/stable"
+    build_requires = "Catch2/2.7.0@catchorg/stable"
     exports_sources = "include/**", "CMakeLists.txt", "test/CMakeLists.txt", "test/*.cpp"
     no_copy_source = True
 
