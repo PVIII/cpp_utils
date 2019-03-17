@@ -13,9 +13,6 @@ linux: &linux
   services:
     - docker
 
-windows: &windows
-  os: windows
-
 matrix:
   fast_finish: true
   include:
@@ -33,8 +30,6 @@ matrix:
       env: CONAN_CLANG_VERSIONS=6.0 CONAN_DOCKER_IMAGE=conanio/clang60 CONAN_UPLOAD=""
     - <<: *linux
       env: CONAN_CLANG_VERSIONS=7.0 CONAN_DOCKER_IMAGE=conanio/clang7 CONAN_UPLOAD=""
-    - <<: *windows
-      env: CONAN_VISUAL_VERSIONS=16 CONAN_UPLOAD=""
     - <<: *linux
       env: CONAN_GCC_VERSIONS=8 CONAN_DOCKER_IMAGE=conanio/gcc8 CONAN_SKIP_CHECK_CREDENTIALS=0
 
