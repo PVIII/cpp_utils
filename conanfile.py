@@ -2,7 +2,7 @@ from conans import ConanFile, CMake, tools
 
 class CppUtils(ConanFile):
     name = "cpputils"
-    version = "1.0.1"
+    version = "1.0.2"
     url = "https://github.com/PVIII/cpp_utils.git"
     license = "MIT"
     author = "Patrick WANG-FRENINGER <github@freninger.at>"
