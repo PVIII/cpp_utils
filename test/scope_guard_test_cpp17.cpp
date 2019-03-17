@@ -1,6 +1,6 @@
 #include "cpp_utils/scope_guard.hpp"
 
-#include "catch.hpp"
+#include "catch2/catch.hpp"
 
 #ifdef __cpp_deduction_guides
 SCENARIO("scope_guard types.")

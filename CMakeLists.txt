@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.8)
 project(cpp_utils)
 
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-conan_basic_setup()
+conan_basic_setup(TARGETS)
 
 enable_testing()
 
