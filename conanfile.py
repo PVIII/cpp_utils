@@ -10,7 +10,7 @@ class CppUtils(ConanFile):
     settings = "os", "compiler", "arch", "build_type"
     generators = "cmake"
     build_requires = "Catch2/2.7.0@catchorg/stable"
-    exports_sources = "include/**", "CMakeLists.txt", "test/CMakeLists.txt", "test/*.cpp"
+    exports_sources = "**"
     no_copy_source = True
 
     def build(self):
@@ -23,6 +23,8 @@ class CppUtils(ConanFile):
     def package(self):
         self.copy("*.hpp")
         self.copy("CMakeLists.txt")
+        self.copy("LICENSE.txt")
+        self.copy("README.md")
 
     def package_id(self):
         self.info.header_only()
